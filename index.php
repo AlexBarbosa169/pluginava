@@ -1,12 +1,43 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * This page is provided for compatability and redirects the user to the default course_report_pluginAva
+ *
+ * @package   course_report_pluginAva
+ * @copyright 
+ * @license   
+ */
    
    require_once '../../../config.php';
    require_once $CFG->libdir.'/gradelib.php';
+   require_once $CFG->libdir.'/grade/grade_grade.php';
+   require_once $CFG->libdir.'/datalib.php';
    require_once $CFG->dirroot.'/user/lib.php';
    require_once $CFG->dirroot.'/user/profile/lib.php';
    require_once $CFG->dirroot.'/grade/lib.php';
    require_once $CFG->dirroot.'/course/report/pluginava/lib.php';
 
+//   Arrays contendo os grupos de avalizações dos usuários   
+$bom = array();
+
+$medio = array();
+
+$ruim = array();
+   
 $context = get_context_instance(CONTEXT_SYSTEM, 1);
 
 $PAGE->set_context($context);
@@ -26,124 +57,43 @@ $PAGE->set_heading('PluginAva');
 echo $OUTPUT->header();
 
 $courseid = required_param('id', PARAM_INT);
+//Testando acesso as páginas
 
-$header_ava = header_ava();
-
-echo $header_ava;
-
-$usersCourse = $DB->get_records_sql("select id, username from public.mdl_user");
-$bom = array();
-$medio = array();
-$ruim = array();
-
-foreach ($usersCourse as $user){            
-    $teste = $DB->get_records_sql("select sum((gg.finalgrade :: bigint) * gi.aggregationcoef2)
-                                    from public.mdl_grade_items as gi 
-                                    join public.mdl_grade_grades as gg on
-                                    gi.id = gg.itemid 
-                                    join public.mdl_user as us
-                                    on gg.userid = us.id
-                                    join public.mdl_course as c on
-                                    gi.courseid = c.id
-                                    where gg.userid = us.id and c.id = $courseid 
-                                    and gi.itemtype != 'course' and us.id = $user->id");        
-
-if(isset($_GET['group'])){
-    echo "<table style='width:100%; border: solid 1px black;'>";
-    echo "<tr><th>Id</th><th>Nome do Usuário</th><th>Desempenho</th></tr>";    
-//    echo "Id: $user->id Nome do usuário: $user->username Desempenho: $teste->sum";
-    foreach($teste as $t){        
-        $d = ($t->sum * 10)."%";
-        echo "<tr><td>$user->id</td><td>$user->username</td><td>$d</td></tr>";        
-    }
-    echo "</table>";
+if(isset($_GET['userSend'])){
+    $header_ava = header_ava(4);      
+    echo $header_ava;
 }else{
-    
-    
-    foreach ($teste as $std){
-        switch ($std->sum) {
-            case NULL:                
-                break;
-            case $std->sum >= 7 :
-                if($std->sum != NULL)
-                    $bom[] = $std->sum;
-                break;
-            case $std->sum < 5 :
-                $ruim[] = $std->sum;
-                break;
-            case $std->sum < 7 :
-                $medio[] = $std->sum;
-                break;
-            default:
-                break;
+    if(isset($_GET['userInfo'])){
+        $header_ava = header_ava(3);
+        echo $header_ava;
+        echo "Entrou";
+    }else{
+        if(isset($_GET['group'])){
+            $group = $_GET['group'];
+            $header_ava = header_ava(2);
+            echo $header_ava;            
+            $selectedGroup = print_group($courseid, $group);            
+                echo "<table style='width:100%; border: solid 1px black;'>";
+                echo "<tr><th>Id</th><th>Nome do Usuário</th><th>Link</th></tr>";                
+                foreach($selectedGroup as $t){                         
+                    $uri = $_SERVER['REQUEST_URI'];
+                    $uri.="&userInfo=$t->id";                    
+                    echo "<tr><td>$t->id</td><td>$t->firstname</td><td><a class='link' href = '$uri'> Próximo </a></td></tr>";        
+                }
+                echo "</table>";                                            
+        }else{
+            $header_ava = header_ava(1);            
+            echo $header_ava;
+            get_index_course($courseid);
         }
-        }
-    
-    
-    
-
-
-$b = count($bom);
-$c = count($medio);  
-
-    echo "
-            <html>
-                <head>
-                  <script type='text/javascript' src='https://www.gstatic.com/charts/loader.js'></script>
-                  <script type='text/javascript'>
-                    google.charts.load('current', {'packages':['corechart']});
-                    google.charts.setOnLoadCallback(drawChart);
-
-                    function drawChart() {
-
-                      var data = google.visualization.arrayToDataTable([
-                        ['Task', 'Hours per Day'],
-                        ['Ótimo', $b],
-                        ['Bom',      $c],                        
-                        ['Ruim', 1],                        
-                      ]);
-
-                      var options = {
-                        title: 'Desempenho dos estudantes do Curso' $curse->name,
-                            colors:['green','blue','yellow']
-                      };
-
-                      var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-                        
-                            function selectHandler() {
-                                 var selectedItem = chart.getSelection()[0];
-                                if (selectedItem) {
-                                    var value = data.getValue(selectedItem.row, 0);
-                                    alert('O selecionou ver os alunos que tiveram o desempenho ' + value + '.');
-//                                      console.log(selectedItem);
-                                    document.getElementById('next').style.setProperty('visibility','visible');
-                                    var parsedUrl = new URL(window.location.href);
-                                    console.log(parsedUrl);                                    
-                                    parsedUrl.searchParams.set('group',value);
-                                    document.getElementById('next').href = parsedUrl;
-                                    
-                            }
-                          }
-
-                      google.visualization.events.addListener(chart, 'select', selectHandler);
-                      chart.draw(data, options);
-                    }                                        
-                    
-                    function alteraGrid(){
-                        document.getElementById('1').style.color = 'blue';
-                    }
-                        
-                  </script>
-                </head>
-                <body>
-                  <div id='piechart' style='width: 900px; height: 500px;'></div>
-                </body>
-        </html>";
-    
-        
-                    
-        echo "<a class='link' id='next' style='visibility: hidden' href = ''> link </a>";
-      }            
+    }
 }
+
+//Fim do teste de acesso as páginas
+                   
+        echo "<a class='link' id='next' style='visibility: hidden' href = ''> Próximo </a>";
+//      }            
+            
+//}
       
 echo $OUTPUT->footer();
