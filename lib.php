@@ -14,6 +14,7 @@ function get_index_course($courseid) {
     $usersCourse = search_users($courseid);
     
     foreach ($usersCourse as $user){                    
+//        $finalgrade = get_field('grade_grades', 'finalgrade', 'itemid', 8, 'userid', $user->id);
         
         $grade_progress = gradeProgress($courseid, $user->id);
         
@@ -41,12 +42,18 @@ function get_index_course($courseid) {
                 }
             }
         }       
-        echo "<div style='width: 100%; min-height: 450px;'>";
+        echo "<div style='display: flex;' class='row-fluid'>";
+        echo "<div style='width: 50%; height: fit-content'>";
             echo graf(count($bom) , count($medio) , count($ruim));             
+        echo "</div>";
+        echo "<div style='width: 50%;'>";
+//        echo "<a class='link' id='next' style='visibility: hidden;' href = 'vai.html'> Próximo </a>";
+        echo "</div>";
         echo "</div>";
 }
 
-function header_ava($nav){
+
+function header_ava($nav, $coursename){
     
     switch ($nav) {
 			case 1:
@@ -79,21 +86,21 @@ function header_ava($nav){
                             $opt3 = 0.2;
                             $opt4 = 0.2;
 				break;
-		}
-    return "<h3>Desempenho dos estudantes do curso</h3><div style='display: flex;' class='row-fluid'>
-            <div id='1' class='span3' style='opacity:$opt; padding: 10px; width: 25%; text-align: center; background-color: gray; border-radius: 10px;'>
-            <img style='border-radius: 50%;' src='img/global.png' width='100' height='100' alt='global'/>
+		}                
+    return "<h3>Desempenho dos estudantes do curso $coursename</h3><div style='display: flex;' class='row-fluid'>
+            <div id='1' class='span3' style='opacity:$opt; padding: 10px; width: 25%; height: fit-content; text-align: center; background-color: gray; border-radius: 10px;'>
+            <img style='width:40%; height: 30%; border-radius: 50%;' src='img/global.png' width='100' height='100' alt='global'/>
             </div>
-            <div id='2' class='span3' style='opacity:$opt2; padding: 10px; width: 25%; text-align: center; background-color: gray; border-radius: 10px;'>
-              <img style='border-radius: 50%;' src='img/groupMoodle.png' width='100' height='100' alt='group'/>
+            <div id='2' class='span3' style='opacity:$opt2; padding: 10px; width: 25%; height: fit-content;text-align: center; background-color: gray; border-radius: 10px;'>
+              <img style='width:40%; height: 30%; border-radius: 50%;' src='img/groupMoodle.png' width='100' height='100' alt='group'/>
             </div>
-            <div id='3' class='span3' style='opacity:$opt3; padding: 10px; width: 25%; text-align: center; background-color: gray; border-radius: 10px;'>
-              <img style='border-radius: 50%;' src='img/userMoodle.png' width='100' height='100' alt='user'/>      
+            <div id='3' class='span3' style='opacity:$opt3; padding: 10px; width: 25%; height: fit-content;text-align: center; background-color: gray; border-radius: 10px;'>
+              <img style='width:40%; height: 30%; border-radius: 50%;' src='img/userMoodle.png' width='100' height='100' alt='user'/>      
             </div>
-            <div id='4' class='span3' style='opacity:$opt4; width: 25%; padding: 10px; text-align: center; background-color: gray; border-radius: 10px;'>
-              <img style='border-radius: 50%;' src='img/messageMoodle.png' width='100' height='100' alt='message'/>
+            <div id='4' class='span3' style='opacity:$opt4; width: 25%; padding: 10px; height: fit-content; text-align: center; background-color: gray; border-radius: 10px;'>
+              <img style='width:40%; height: 30%; border-radius: 50%;' src='img/messageMoodle.png' width='100' height='100' alt='message'/>
             </div>
-          </div>";
+          </div><br><br>";
 }
 
 function graf( $a , $b , $c){
@@ -115,10 +122,11 @@ function graf( $a , $b , $c){
                       ]);
 
                       var options = {
-                            width: 500,
-                            heigth: 300,
+                            width: 300,
+                            heigth: 300,                             
+                            chartArea:{left:20,top:0,width:'100%',height:'75%'},                            
                             title: 'Desempenho dos estudantes do Curso',
-                            colors:['green','blue','yellow']
+                            colors:['green','yellow','red']
                       };
 
                       var chart = new google.visualization.PieChart(document.getElementById('piechart'));
@@ -147,7 +155,7 @@ function graf( $a , $b , $c){
                   </script>
                 </head>
                 <body>
-                  <div id='piechart' style='width: 900px; height: 500px;'></div>
+                  <div id='piechart' style='width: 900px; height: 500px; margin: auto;'></div>
                 </body>
         </html>";
 }
@@ -204,7 +212,45 @@ function gradeProgress($courseid,$userid) {
 
 function userGradeInfo($courseid, $userid) {
     global $DB;
-    $grade_progress = $DB->get_records_sql(
-            ""
+    $grade_user = $DB->get_records_sql(
+            "select gi.itemname as atividade,
+                gi.grademin :: numeric(10,2)as notaMinima, 
+                gi.grademax :: numeric(10,2) as notaMaxima, 
+                gg.finalgrade :: numeric(10,2) as notaObtida,
+                ((gg.finalgrade ::numeric(10,2) * gi.aggregationcoef2)*10):: numeric(10,2) as contribuicao
+                from public.mdl_grade_items as gi 
+                join public.mdl_grade_grades as gg on
+                gi.id = gg.itemid 
+                join public.mdl_user as us
+                on gg.userid = us.id
+                join public.mdl_course as c on
+                gi.courseid = c.id
+                where gg.userid = us.id and c.id = $courseid 
+                and gi.itemtype != 'course' and us.id = $userid"
             );
+    
+            echo "<table style='border: solid 1px black; margin: auto;'>"
+                    . "<thead>"
+                    . "<th>Atividade</th>"
+                    . "<th>Nota Miníma da Atividade</th>"
+                    . "<th>Nota Máxima da Atividade</th>"
+                    . "<th>Nota Máxima Obtida</th>"
+                    . "<th>Contribuição para o curso</th>"
+                    . "</thead><tbody>";								
+            foreach ($grade_user as $grade) {                
+//                var_dump($grade);
+                if(!$grade->notaobtida)
+                    $notaobtida = 0;
+                else
+                    $notaobtida = $grade->notaobtida;
+                
+                echo "<tr>";
+                echo "<td>$grade->atividade</td>";
+                echo "<td>$grade->notaminima</td>";
+                echo "<td>$grade->notamaxima</td>";
+                echo "<td>$notaobtida</td>";
+                echo "<td>$grade->contribuicao%</td>";
+                echo "</tr>";
+            }
+            echo "</tbody></table>";
 }

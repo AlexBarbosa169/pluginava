@@ -65,24 +65,26 @@ if(isset($_GET['userSend'])){
 }else{
     if(isset($_GET['userInfo'])){
         $header_ava = header_ava(3);
+        $useridInfo = $_GET['userInfo'];
         echo $header_ava;
-        echo "Entrou";
+        echo userGradeInfo($courseid, $useridInfo);
     }else{
         if(isset($_GET['group'])){
             $group = $_GET['group'];
             $header_ava = header_ava(2);
             echo $header_ava;            
-            $selectedGroup = print_group($courseid, $group);            
-                echo "<table style='width:100%; border: solid 1px black;'>";
+            $selectedGroup = print_group($courseid, $group);             
+                echo "<table style='width:100%; border: solid 1px black;margin: auto;'>";
                 echo "<tr><th>Id</th><th>Nome do Usuário</th><th>Link</th></tr>";                
                 foreach($selectedGroup as $t){                         
                     $uri = $_SERVER['REQUEST_URI'];
                     $uri.="&userInfo=$t->id";                    
                     echo "<tr><td>$t->id</td><td>$t->firstname</td><td><a class='link' href = '$uri'> Próximo </a></td></tr>";        
                 }
-                echo "</table>";                                            
-        }else{
-            $header_ava = header_ava(1);            
+                echo "</table>";                                                            
+        }else{            
+            $courseinfo = $COURSE;            
+            $header_ava = header_ava(1,$courseinfo->shortname);            
             echo $header_ava;
             get_index_course($courseid);
         }
