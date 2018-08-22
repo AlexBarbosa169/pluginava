@@ -138,9 +138,8 @@ function graf( $a , $b , $c){
                                     document.getElementById('next').style.setProperty('visibility','visible');
                                     var parsedUrl = new URL(window.location.href);
                                     console.log(parsedUrl);                                    
-                                    parsedUrl.searchParams.set('group',value);
-                                    document.getElementById('next').href = parsedUrl;
-                                    
+                                    parsedUrl.searchParams.set('group',value);                                    
+                                    window.location.href = parsedUrl;;
                             }
                           }
 
