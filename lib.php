@@ -88,17 +88,17 @@ function header_ava($nav, $coursename){
 				break;
 		}                
     return "<h3>Desempenho dos estudantes do curso $coursename</h3><div style='display: flex;' class='row-fluid'>
-            <div id='1' class='span3' style='opacity:$opt; padding: 10px; width: 25%; height: fit-content; text-align: center; background-color: gray; border-radius: 10px;'>
-            <img style='width:40%; height: 30%; border-radius: 50%;' src='img/global.png' width='100' height='100' alt='global'/>
+            <div id='nav-icon1' class='span3' style='opacity:$opt; padding: 10px; width: 25%; height: fit-content; text-align: center; background-color: gray; border-radius: 10px;'>
+            <img class='bread' src='img/global.png' width='100' height='100' alt='global'/>
             </div>
-            <div id='2' class='span3' style='opacity:$opt2; padding: 10px; width: 25%; height: fit-content;text-align: center; background-color: gray; border-radius: 10px;'>
-              <img style='width:40%; height: 30%; border-radius: 50%;' src='img/groupMoodle.png' width='100' height='100' alt='group'/>
+            <div id='nav-icon2' class='span3' style='opacity:$opt2; padding: 10px; width: 25%; height: fit-content;text-align: center; background-color: gray; border-radius: 10px;'>
+              <img class='bread' src='img/groupMoodle.png' width='100' height='100' alt='group'/>
             </div>
-            <div id='3' class='span3' style='opacity:$opt3; padding: 10px; width: 25%; height: fit-content;text-align: center; background-color: gray; border-radius: 10px;'>
-              <img style='width:40%; height: 30%; border-radius: 50%;' src='img/userMoodle.png' width='100' height='100' alt='user'/>      
+            <div id='nav-icon3' class='span3' style='opacity:$opt3; padding: 10px; width: 25%; height: fit-content;text-align: center; background-color: gray; border-radius: 10px;'>
+              <img class='bread' src='img/userMoodle.png' width='100' height='100' alt='user'/>      
             </div>
-            <div id='4' class='span3' style='opacity:$opt4; width: 25%; padding: 10px; height: fit-content; text-align: center; background-color: gray; border-radius: 10px;'>
-              <img style='width:40%; height: 30%; border-radius: 50%;' src='img/messageMoodle.png' width='100' height='100' alt='message'/>
+            <div id='nav-icon4' class='span3' style='opacity:$opt4; width: 25%; padding: 10px; height: fit-content; text-align: center; background-color: gray; border-radius: 10px;'>
+              <img class='bread' src='img/messageMoodle.png' width='100' height='100' alt='message'/>
             </div>
           </div><br><br>";
 }

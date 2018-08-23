@@ -26,9 +26,10 @@
    require_once $CFG->libdir.'/gradelib.php';
    require_once $CFG->libdir.'/grade/grade_grade.php';
    require_once $CFG->libdir.'/datalib.php';
+   require_once $CFG->libdir.'/pagelib.php';
    require_once $CFG->dirroot.'/user/lib.php';
    require_once $CFG->dirroot.'/user/profile/lib.php';
-   require_once $CFG->dirroot.'/grade/lib.php';
+   require_once $CFG->dirroot.'/grade/lib.php';   
    require_once $CFG->dirroot.'/course/report/pluginava/lib.php';
 
 //   Arrays contendo os grupos de avalizações dos usuários   
@@ -40,11 +41,15 @@ $ruim = array();
    
 $context = get_context_instance(CONTEXT_SYSTEM, 1);
 
+$courseid = required_param('id', PARAM_INT);
+
 $PAGE->set_context($context);
 
-$PAGE->set_url('/course/report/plugin/index.php');
+$PAGE->set_url('/course/report/pluginava/index.php');
 
-$PAGE->navbar->add(get_string('pluginname', 'coursereport_pluginava'), new moodle_url("$CFG->httpswwwroot/coursereport/pluginava/index.php"));
+$PAGE->requires->css('/course/report/pluginava/css/stylepluginava.css', true);
+
+$PAGE->navbar->add(get_string('pluginname', 'coursereport_pluginava'), new moodle_url("$CFG->httpswwwroot/course/report/pluginava/index.php?id=".$courseid));
 
 $PAGE->navbar->add('pluginava');
 
@@ -56,24 +61,26 @@ $PAGE->set_heading('PluginAva');
 
 echo $OUTPUT->header();
 
-$courseid = required_param('id', PARAM_INT);
+$groupTeste = optional_param('group',null, PARAM_TEXT);
+$userInfoTeste = optional_param('userInfo', null,PARAM_TEXT);
+$UserSendTeste = optional_param('userSend', null,PARAM_TEXT);
+$courseinfo = $COURSE;
+
 //Testando acesso as páginas
 
-if(isset($_GET['userSend'])){
-    $header_ava = header_ava(4);      
+if($UserSendTeste){
+    $header_ava = header_ava(4,$courseinfo->shortname);      
     echo $header_ava;
 }else{
-    if(isset($_GET['userInfo'])){
-        $header_ava = header_ava(3);
-        $useridInfo = $_GET['userInfo'];
+    if($userInfoTeste){
+        $header_ava = header_ava(3, $courseinfo->shortname);        
         echo $header_ava;
-        echo userGradeInfo($courseid, $useridInfo);
+        echo userGradeInfo($courseid, $userInfoTeste);
     }else{
-        if(isset($_GET['group'])){
-            $group = $_GET['group'];
-            $header_ava = header_ava(2);
+        if($groupTeste){
+            $header_ava = header_ava(2,$courseinfo->shortname);
             echo $header_ava;            
-            $selectedGroup = print_group($courseid, $group);             
+            $selectedGroup = print_group($courseid, $groupTeste);                             
                 echo "<table style='width:100%; border: solid 1px black;margin: auto;'>";
                 echo "<tr><th>Id</th><th>Nome do Usuário</th><th>Link</th></tr>";                
                 foreach($selectedGroup as $t){                         
@@ -82,8 +89,7 @@ if(isset($_GET['userSend'])){
                     echo "<tr><td>$t->id</td><td>$t->firstname</td><td><a class='link' href = '$uri'> Próximo </a></td></tr>";        
                 }
                 echo "</table>";                                                            
-        }else{            
-            $courseinfo = $COURSE;            
+        }else{                                    
             $header_ava = header_ava(1,$courseinfo->shortname);            
             echo $header_ava;
             get_index_course($courseid);
