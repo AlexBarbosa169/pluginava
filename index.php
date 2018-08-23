@@ -66,7 +66,6 @@ $userInfoTeste = optional_param('userInfo', null,PARAM_TEXT);
 $UserSendTeste = optional_param('userSend', null,PARAM_TEXT);
 $courseinfo = $COURSE;
 
-//Testando acesso as páginas
 
 if($UserSendTeste){
     $header_ava = header_ava(4,$courseinfo->shortname);      
