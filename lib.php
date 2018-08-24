@@ -3,6 +3,7 @@
 $bom = array();
 $medio = array();
 $ruim = array();
+$nulos = array();
 
 function pluginava_report_extend_navigation($reportnav, $course, $context) {
     $url = new moodle_url('/course/report/pluginava/index.php', array('id' => $course->id));
@@ -12,19 +13,23 @@ function pluginava_report_extend_navigation($reportnav, $course, $context) {
 function get_index_course($courseid) {      
     global $DB;
     $usersCourse = search_users($courseid);
-    
+    //$temNota;
+    //var_dump($temNota);
     foreach ($usersCourse as $user){                    
 //        $finalgrade = get_field('grade_grades', 'finalgrade', 'itemid', 8, 'userid', $user->id);
         
         $grade_progress = gradeProgress($courseid, $user->id);
-        
         foreach ($grade_progress as $std){
-//            var_dump($std);
+//           if($std->sum != NULL){
+//               $temNota = 1;
+//           }
+           // var_dump($std);
+           // var_dump($temNota);
             switch ($std->sum) {
                 case NULL:                
-                    $ruim[] = $user;
+                    $nulos[] = $user;
                     break;
-                case $std->sum >= 7 :
+                case $std->sum > 7 :
                     if($std->sum != NULL)
                         $bom[] = $user;
 //                        var_dump($bom);
@@ -33,18 +38,22 @@ function get_index_course($courseid) {
                     $ruim[] = $user;
 //                    var_dump($ruim);
                     break;
-                case $std->sum < 7 :
+                case $std->sum > 4 && $std->sum < 8:
                     $medio[] = $user;
 //                    var_dump($medio);
                     break;
-                default:                    
+                default:   
                     break;
                 }
             }
         }       
         echo "<div style='display: flex;' class='row-fluid'>";
         echo "<div style='width: 50%; height: fit-content'>";
-            echo graf(count($bom) , count($medio) , count($ruim));             
+          
+        echo graf(count($bom) , count($medio) , count($ruim), count($nulos)); 
+            
+               
+            
         echo "</div>";
         echo "<div style='width: 50%;'>";
 //        echo "<a class='link' id='next' style='visibility: hidden;' href = 'vai.html'> Próximo </a>";
@@ -103,7 +112,7 @@ function header_ava($nav, $coursename){
           </div><br><br>";
 }
 
-function graf( $a , $b , $c){
+function graf( $a , $b , $c, $d){
     return "
             <html>
                 <head>
@@ -118,7 +127,8 @@ function graf( $a , $b , $c){
                         ['Task', 'Hours per Day'],
                         ['Ótimo', $a],
                         ['Bom',      $b],                        
-                        ['Ruim', $c],                        
+                        ['Ruim', $c],  
+                        ['Nulos', $d], 
                       ]);
 
                       var options = {
@@ -126,7 +136,7 @@ function graf( $a , $b , $c){
                             heigth: 300,                             
                             chartArea:{left:20,top:0,width:'100%',height:'75%'},                            
                             title: 'Desempenho dos estudantes do Curso',
-                            colors:['green','yellow','red']
+                            colors:['green','yellow','red', 'gray']
                       };
 
                       var chart = new google.visualization.PieChart(document.getElementById('piechart'));
