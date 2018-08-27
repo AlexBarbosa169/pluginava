@@ -47,18 +47,14 @@ function get_index_course($courseid) {
                 }
             }
         }       
-        echo "<div style='display: flex;' class='row-fluid'>";
-        echo "<div style='width: 50%; height: fit-content'>";
+        
+        echo "<div id='piechart' >";
           
-        echo graf(count($bom) , count($medio) , count($ruim), count($nulos)); 
-            
+//        echo graf(count($bom) , count($medio) , count($ruim), count($nulos)); 
+        echo graf_chartjs(count($bom) , count($medio) , count($ruim), count($nulos)); 
                
             
-        echo "</div>";
-        echo "<div style='width: 50%;'>";
-//        echo "<a class='link' id='next' style='visibility: hidden;' href = 'vai.html'> Próximo </a>";
-        echo "</div>";
-        echo "</div>";
+        echo "</div>";        
 }
 
 
@@ -149,7 +145,7 @@ function graf( $a , $b , $c, $d){
                                     var parsedUrl = new URL(window.location.href);
                                     console.log(parsedUrl);                                    
                                     parsedUrl.searchParams.set('group',value);                                    
-                                    window.location.href = parsedUrl;;
+                                    window.location.href = parsedUrl;
                             }
                           }
 
@@ -262,4 +258,59 @@ function userGradeInfo($courseid, $userid) {
                 echo "</tr>";
             }
             echo "</tbody></table>";
+}
+
+    function graf_chartjs($a,$b,$c,$d){
+    echo "<canvas id='myChartPie' width='400' height='400'></canvas>";
+    
+    echo "<script src='js/Chart.min.js'></script>";
+    
+    echo "<script>
+        var ctx = document.getElementById('myChartPie').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Bom', 'Médio', 'Ruim', 'Nulos'],
+                datasets: [{
+                    label: '# of Votes',
+                    data: [$a, $b, $c, $d ],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)'                        
+                    ],
+                    borderColor: [
+                        'rgba(255,99,132,1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)'                        
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                events: ['click']
+            }
+        });                
+        
+        document.getElementById('myChartPie').onclick = function(evt){                        
+            var activeElements = myChart.getElementsAtEvent(evt);            
+                
+        if(activeElements.length > 0)
+            {
+            var clickedElementindex = activeElements[0]['_index'];      
+            
+            var label = myChart.data.labels[clickedElementindex];            
+//            var value = myChart.data.datasets[0].data[clickedElementindex];      
+            document.getElementById('next').style.setProperty('visibility','visible');
+                                    var parsedUrl = new URL(window.location.href);
+                                    console.log(parsedUrl);                                    
+                                    parsedUrl.searchParams.set('group',label);                                    
+                                    window.location.href = parsedUrl;
+                console.log(label);
+            }
+        };
+        </script>";
+    
 }
