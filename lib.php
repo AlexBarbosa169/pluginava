@@ -263,7 +263,7 @@ function userGradeInfo($courseid, $userid) {
     function graf_chartjs($a,$b,$c,$d){
     echo "<canvas id='myChartPie' width='400' height='400'></canvas>";
     
-    echo "<script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js'></script>";
+    echo "<script src='js/Chart.min.js'></script>";
     
     echo "<script>
         var ctx = document.getElementById('myChartPie').getContext('2d');
