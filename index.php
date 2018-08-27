@@ -72,20 +72,34 @@ if($UserSendTeste){
     echo $header_ava;
 }else{
     if($userInfoTeste){
-        $header_ava = header_ava(3, $courseinfo->shortname);        
+        $header_ava = header_ava(3, $courseinfo->shortname);  
+        $group_name;
         echo $header_ava;
+        if (isset($_GET['group'])) {
+            //echo $_GET['group'];
+            $group_name = $_GET['group'];
+            //echo $group_name . " aeae";
+        } else {
+            // Fallback behaviour goes here
+        }
+        echo "<a href='index.php?id=$courseid&group=$group_name'>Voltar</a>";
+        
+        //var_dump($courseid);
         echo userGradeInfo($courseid, $userInfoTeste);
+        
     }else{
         if($groupTeste){
             $header_ava = header_ava(2,$courseinfo->shortname);
             echo $header_ava;            
             $selectedGroup = print_group($courseid, $groupTeste);                             
                 echo "<table style='width:100%; border: solid 1px black;margin: auto;'>";
-                echo "<tr><th>Id</th><th>Nome do Usuário</th><th>Link</th></tr>";                
+                echo "<tr><th>Id</th><th>Nome do Usuário</th><th>Link</th></tr>";  
+                echo "<a href='index.php?id=$courseid'>Voltar</a>";
+                //var_dump($courseid);
                 foreach($selectedGroup as $t){                         
                     $uri = $_SERVER['REQUEST_URI'];
-                    $uri.="&userInfo=$t->id";                    
-                    echo "<tr><td>$t->id</td><td>$t->firstname</td><td><a class='link' href = '$uri'> Próximo </a></td></tr>";        
+                    $uri.="&userInfo=$t->id";             
+                    echo "<tr><td>$t->id</td><td>$t->firstname</td><td><a class='link' href = '$uri'> Próximo </a></td></tr>";                 
                 }
                 echo "</table>";                                                            
         }else{                                    
