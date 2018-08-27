@@ -11,8 +11,8 @@ and open the template in the editor.
 
 @media (max-width: 767px) {   
     
-    #piechart{
-        width: 50%;
+    div#piechart{
+        width: 100%;
     }
     
     #nav-icon1 {
@@ -33,7 +33,7 @@ and open the template in the editor.
  }
  
  div#piechart{
-        width: 10%;
-        background-color: blue;         
+        width: 50%;  
+        margin: auto;
  }
   

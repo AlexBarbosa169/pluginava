@@ -260,7 +260,7 @@ function userGradeInfo($courseid, $userid) {
             echo "</tbody></table>";
 }
 
-function graf_chartjs($a,$b,$c,$d){
+    function graf_chartjs($a,$b,$c,$d){
     echo "<canvas id='myChartPie' width='400' height='400'></canvas>";
     
     echo "<script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js'></script>";
@@ -295,8 +295,7 @@ function graf_chartjs($a,$b,$c,$d){
         });                
         
         document.getElementById('myChartPie').onclick = function(evt){                        
-            var activeElements = myChart.getElementsAtEvent(evt);
-            //get the internal index of slice in pie chart
+            var activeElements = myChart.getElementsAtEvent(evt);            
                 
         if(activeElements.length > 0)
             {
@@ -311,7 +310,7 @@ function graf_chartjs($a,$b,$c,$d){
                                     window.location.href = parsedUrl;
                 console.log(label);
             }
-        }
+        };
         </script>";
     
 }
