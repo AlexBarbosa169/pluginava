@@ -50,7 +50,7 @@ function get_index_course($courseid) {
         
         echo "<div id='piechart' >";
           
-//        echo graf(count($bom) , count($medio) , count($ruim), count($nulos)); 
+        //echo graf(count($bom) , count($medio) , count($ruim), count($nulos)); 
         echo graf_chartjs(count($bom) , count($medio) , count($ruim), count($nulos)); 
                
             
@@ -270,12 +270,12 @@ function userGradeInfo($courseid, $userid) {
         var myChart = new Chart(ctx, {
             type: 'pie',
             data: {
-                labels: ['Bom', 'Médio', 'Ruim', 'Nulos'],
+                labels: ['Ótimo', 'Bom', 'Ruim', 'Nulos'],
                 datasets: [{
                     label: '# of Votes',
                     data: [$a, $b, $c, $d ],
                     backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(154, 232, 135, 0.2)',
                         'rgba(54, 162, 235, 0.2)',
                         'rgba(255, 206, 86, 0.2)',
                         'rgba(75, 192, 192, 0.2)'                        
