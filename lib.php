@@ -275,10 +275,10 @@ function userGradeInfo($courseid, $userid) {
                     label: '# of Votes',
                     data: [$a, $b, $c, $d ],
                     backgroundColor: [
-                        'rgba(154, 232, 135, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)'                        
+                        'rgba(0, 232, 0, 1)',
+                        'rgba(200, 0 , 0, 1)',
+                        'rgba(255, 0, 255, 1)',
+                        'rgba(128, 128, 128, 1)'                        
                     ],
                     borderColor: [
                         'rgba(255,99,132,1)',
@@ -290,7 +290,7 @@ function userGradeInfo($courseid, $userid) {
                 }]
             },
             options: {
-                events: ['click']
+                events: ['click']                                      
             }
         });                
         
