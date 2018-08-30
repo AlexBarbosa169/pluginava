@@ -95,7 +95,27 @@ if($UserSendTeste){
                 echo "<table style='width:100%; border: solid 1px black;margin: auto;'>";
                 echo "<tr><th>Id</th><th>Nome do Usuário</th><th>Link</th></tr>";  
                 echo "<a href='index.php?id=$courseid'>Voltar</a>";
+                //var_dump($selectedGroup);
+                //echo '<pre>', print_r($selectedGroup), '</pre';
+                //echo "as";
+                $users_filtrado = array_filter($selectedGroup, function($user){
+                    if(strpos($user->firstname, "Us") === 0){
+                        return $user;
+                    }
+                    //return $user->firstname === 'User2';
+                }
+                );
+                var_dump($users_filtrado);
+                $strTeste = "teste";
+//                if(strpos($strTeste, "tes") === 0){
+//                    echo "ok";
+//                }
+//                foreach($selectedGroup as $obj){
+//                    echo "$obj->firstname";
+//                }
+                    
                 //var_dump($courseid);
+                echo "<input type='text' placeholder='Pesquisar..'>";
                 foreach($selectedGroup as $t){                         
                     $uri = $_SERVER['REQUEST_URI'];
                     $uri.="&userInfo=$t->id";             
