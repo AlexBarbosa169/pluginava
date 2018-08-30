@@ -91,7 +91,8 @@ function header_ava($nav, $coursename){
                             $opt3 = 0.2;
                             $opt4 = 0.2;
 				break;
-		}                
+		}
+                
     return "<h3>Desempenho dos estudantes do curso $coursename</h3><div style='display: flex;' class='row-fluid'>
             <div id='nav-icon1' class='span3' style='opacity:$opt; padding: 10px; width: 25%; height: fit-content; text-align: center; background-color: gray; border-radius: 10px;'>
             <img class='bread' src='img/global.png' width='100' height='100' alt='global'/>
@@ -275,22 +276,22 @@ function userGradeInfo($courseid, $userid) {
                     label: '# of Votes',
                     data: [$a, $b, $c, $d ],
                     backgroundColor: [
-                        'rgba(154, 232, 135, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)'                        
+                        'rgba(0, 232, 0, 1)',
+                        'rgba(200, 0 , 0, 1)',
+                        'rgba(255, 0, 255, 1)',
+                        'rgba(128, 128, 128, 1)'                        
                     ],
                     borderColor: [
-                        'rgba(255,99,132,1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)'                        
+                        'rgba(255, 255, 255,1)',
+                        'rgba(255, 255, 255, 1)',
+                        'rgba(255, 255, 255, 1)',
+                        'rgba(255, 255, 255, 1)'                        
                     ],
                     borderWidth: 1
                 }]
             },
             options: {
-                events: ['click']
+                events: ['click']                                      
             }
         });                
         
