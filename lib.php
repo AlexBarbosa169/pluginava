@@ -55,7 +55,7 @@ function get_index_course($courseid) {
         echo "<h4>Média dos alunos do curso</h4><p>".(($average/count($usersCourse))*10)."%</p>";
         echo "</div>";
         echo "<div class='card_info'>";
-        echo "<h4>Início das atividades no curso</h4><p>".$COURSE->shortname."</p>";
+        echo "<h4>Início das atividades no curso</h4><p>28/05/2018</p>";
         echo "</div>";        
         echo "</div>";        
         echo "</div>";        
@@ -282,7 +282,7 @@ function userGradeInfo($courseid, $userid) {
                     backgroundColor: [
                         'rgba(0, 232, 0, 1)',
                         'rgba(200, 0 , 0, 1)',
-                        'rgba(255, 0, 255, 1)',
+                        'rgba(255, 235, 59, 1)',
                         'rgba(128, 128, 128, 1)'                        
                     ],
                     borderColor: [
