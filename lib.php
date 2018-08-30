@@ -278,11 +278,11 @@ function userGradeInfo($courseid, $userid) {
                 labels: ['Ótimo', 'Bom', 'Ruim', 'Nulos'],
                 datasets: [{
                     label: '# of Votes',
-                    data: [$a, $b, $c, $d ],
+                    data: [$a, $b, 5, $d ],
                     backgroundColor: [
                         'rgba(0, 232, 0, 1)',
-                        'rgba(200, 0 , 0, 1)',
-                        'rgba(255, 235, 59, 1)',
+                        'rgba(255, 235 , 59, 1)',
+                        'rgba(200, 0, 0, 1)',
                         'rgba(128, 128, 128, 1)'                        
                     ],
                     borderColor: [
