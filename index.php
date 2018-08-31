@@ -65,7 +65,7 @@ $groupTeste = optional_param('group',null, PARAM_TEXT);
 $userInfoTeste = optional_param('userInfo', null,PARAM_TEXT);
 $UserSendTeste = optional_param('userSend', null,PARAM_TEXT);
 $courseinfo = $COURSE;
-
+$group_name;
 
 if($UserSendTeste){
     $header_ava = header_ava(4,$courseinfo->shortname);      
@@ -73,7 +73,7 @@ if($UserSendTeste){
 }else{
     if($userInfoTeste){
         $header_ava = header_ava(3, $courseinfo->shortname);  
-        $group_name;
+        
         echo $header_ava;
         if (isset($_GET['group'])) {
             //echo $_GET['group'];
@@ -98,30 +98,57 @@ if($UserSendTeste){
                 //var_dump($selectedGroup);
                 //echo '<pre>', print_r($selectedGroup), '</pre';
                 //echo "as";
-                $users_filtrado = array_filter($selectedGroup, function($user){
-                    if(strpos($user->firstname, "Us") === 0){
-                        return $user;
-                    }
-                    //return $user->firstname === 'User2';
-                }
-                );
-                var_dump($users_filtrado);
-                $strTeste = "teste";
+               // var_dump($users_filtrado);
+                
 //                if(strpos($strTeste, "tes") === 0){
 //                    echo "ok";
 //                }
 //                foreach($selectedGroup as $obj){
 //                    echo "$obj->firstname";
 //                }
-                    
-                //var_dump($courseid);
-                echo "<input type='text' placeholder='Pesquisar..'>";
-                foreach($selectedGroup as $t){                         
+
+                if (isset($_GET['group'])) {
+                        $group_name = $_GET['group'];
+                } else {
+                    // Fallback behaviour goes here
+                }
+                echo "<form action=\"index.php?id=$courseid&group=$group_name\" method='post'>
+                    <input type='text' name='usuario' id='user' value=''>
+                    <input type='submit' value='pesquisar'>
+                    </form>
+                    ";
+                             
+//                $valor_filtrado = $_POST['usuario'];
+                $valor_filtrado = optional_param('usuario',null, PARAM_TEXT);
+                if(!$valor_filtrado){
+                    foreach($selectedGroup as $t){                         
                     $uri = $_SERVER['REQUEST_URI'];
                     $uri.="&userInfo=$t->id";             
                     echo "<tr><td>$t->id</td><td>$t->firstname</td><td><a class='link' href = '$uri'> Próximo </a></td></tr>";                 
                 }
-                echo "</table>";                                                            
+                }else{
+                $users_filtrado = array_filter($selectedGroup, function($user) use($valor_filtrado){
+                    if(strpos($user->firstname, $valor_filtrado) === 0){
+                        return $user;
+                    }
+                    //return $user->firstname === 'User2';
+                }
+                );
+                //$selectedGroup
+                //var_dump($users_filtrado);
+                if(empty($users_filtrado)){
+                    echo "Não encontramos nemhum dado com essa pesquisa!";
+                }else{
+                    foreach($users_filtrado as $t){                         
+                    $uri = $_SERVER['REQUEST_URI'];
+                    $uri.="&userInfo=$t->id";             
+                    echo "<tr><td>$t->id</td><td>$t->firstname</td><td><a class='link' href = '$uri'> Próximo </a></td></tr>";                 
+                }
+                }
+                
+                 
+                }
+                echo "</table>"; 
         }else{                                    
             $header_ava = header_ava(1,$courseinfo->shortname);            
             echo $header_ava;
