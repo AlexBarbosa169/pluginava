@@ -112,7 +112,7 @@ if($UserSendTeste){
 //
 //Fim do teste de acesso as páginas
                    
-        echo "<a class='link' id='next' style='visibility: hidden' href = ''> Próximo </a>";
+//            echo "<a class='link' id='next' style='visibility: hidden' href = ''> Próximo </a>";
 //      }            
             
 //}
