@@ -25,6 +25,13 @@ and open the template in the editor.
         background-color: gray; 
         border-radius: 10px;
     }
+    
+    .container_index {    
+     display: contents;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 20px;
+    gap: 20px;
+}
 }
 
 .bread{        
@@ -33,6 +40,42 @@ and open the template in the editor.
         border-radius: 50%;
  }
  
+ .container_index {  
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-gap: 20px;
+  gap: 20px;
+}
+
+.card_info{
+    min-height: 20px;
+    padding: 19px;
+    margin-bottom: 20px;
+    background-color: #f5f5f5;
+    border: 1px solid #e3e3e3;    
+    border-radius: 4px;
+}
+
+.card_info p {
+    height: inherit;
+    text-align: center;
+    padding: 0px;
+    margin: 0px;  
+    color: #9E9E9E;
+    font-size: large;
+    font-weight: bold;
+}
+
+.card_info h4 {
+    height: inherit;
+    text-align: center;
+    padding: 0px;
+    margin: 0px;            
+    font-size: large;
+    font-weight: bold;
+}
+
+ 
  @media (min-width: 767px){
      div#piechart{
         width: 50%;  
@@ -40,4 +83,6 @@ and open the template in the editor.
     }
  }
  
-  
+ #plugin-title{
+     text-align: center
+ }

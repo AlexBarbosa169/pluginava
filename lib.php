@@ -10,21 +10,14 @@ function pluginava_report_extend_navigation($reportnav, $course, $context) {
     $reportnav->add(get_string('pluginname', 'coursereport_pluginava'), $url);
 }
 
-function get_index_course($courseid) {      
+function get_index_course($courseid) {          
     global $DB;
-    $usersCourse = search_users($courseid);
-    //$temNota;
-    //var_dump($temNota);
-    foreach ($usersCourse as $user){                    
-//        $finalgrade = get_field('grade_grades', 'finalgrade', 'itemid', 8, 'userid', $user->id);
-        
-        $grade_progress = gradeProgress($courseid, $user->id);
+    $usersCourse = search_users($courseid);    
+    foreach ($usersCourse as $user){                            
+        $grade_progress = gradeProgress($courseid, $user->id);        
+                
         foreach ($grade_progress as $std){
-//           if($std->sum != NULL){
-//               $temNota = 1;
-//           }
-           // var_dump($std);
-           // var_dump($temNota);
+            $average += $std->sum;            
             switch ($std->sum) {
                 case NULL:                
                     $nulos[] = $user;
@@ -47,13 +40,24 @@ function get_index_course($courseid) {
                 }
             }
         }       
+
+        echo "<div class='container_index'>";            
         
-        echo "<div id='piechart' >";
-          
+        echo "<div id='piechart' >";          
         //echo graf(count($bom) , count($medio) , count($ruim), count($nulos)); 
         echo graf_chartjs(count($bom) , count($medio) , count($ruim), count($nulos)); 
-               
-            
+        echo "</div>";        
+        echo "<div class='info_course'>";
+        echo "<div class='card_info'>";
+        echo "<h4>Número de usuários no curso</h4><p>".count($usersCourse)."</p>";
+        echo "</div>";        
+        echo "<div class='card_info'>";
+        echo "<h4>Média dos alunos do curso</h4><p>".(($average/count($usersCourse))*10)."%</p>";
+        echo "</div>";
+        echo "<div class='card_info'>";
+        echo "<h4>Início das atividades no curso</h4><p>28/05/2018</p>";
+        echo "</div>";        
+        echo "</div>";        
         echo "</div>";        
 }
 
@@ -93,7 +97,7 @@ function header_ava($nav, $coursename){
 				break;
 		}
                 
-    return "<h3>Desempenho dos estudantes do curso $coursename</h3><div style='display: flex;' class='row-fluid'>
+    return "<h3 id='plugin-title'>Desempenho dos estudantes do curso $coursename</h3><div style='display: flex;' class='row-fluid'>
             <div id='nav-icon1' class='span3' style='opacity:$opt; padding: 10px; width: 25%; height: fit-content; text-align: center; background-color: gray; border-radius: 10px;'>
             <img class='bread' src='img/global.png' width='100' height='100' alt='global'/>
             </div>
@@ -274,11 +278,11 @@ function userGradeInfo($courseid, $userid) {
                 labels: ['Ótimo', 'Bom', 'Ruim', 'Nulos'],
                 datasets: [{
                     label: '# of Votes',
-                    data: [$a, $b, $c, $d ],
+                    data: [$a, $b, 5, $d ],
                     backgroundColor: [
                         'rgba(0, 232, 0, 1)',
-                        'rgba(200, 0 , 0, 1)',
-                        'rgba(255, 0, 255, 1)',
+                        'rgba(255, 235 , 59, 1)',
+                        'rgba(200, 0, 0, 1)',
                         'rgba(128, 128, 128, 1)'                        
                     ],
                     borderColor: [
@@ -291,7 +295,7 @@ function userGradeInfo($courseid, $userid) {
                 }]
             },
             options: {
-                events: ['click']                                      
+                events: ['click','mousemove']                                      
             }
         });                
         
@@ -304,7 +308,7 @@ function userGradeInfo($courseid, $userid) {
             
             var label = myChart.data.labels[clickedElementindex];            
 //            var value = myChart.data.datasets[0].data[clickedElementindex];      
-            document.getElementById('next').style.setProperty('visibility','visible');
+//            document.getElementById('next').style.setProperty('visibility','visible');
                                     var parsedUrl = new URL(window.location.href);
                                     console.log(parsedUrl);                                    
                                     parsedUrl.searchParams.set('group',label);                                    
