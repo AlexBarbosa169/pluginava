@@ -192,13 +192,23 @@ function print_group($courseid, $group){
             }
         }
         }else{
-            foreach ($usersCourse as $user) {
-            $grade_progress = gradeProgress($courseid, $user->id);
-            foreach ($grade_progress as $grade) {
-                if($grade->sum < 5)
-                    $selectGroup[] = $user;
+            if($group == "Ruim"){
+                foreach ($usersCourse as $user) {
+                $grade_progress = gradeProgress($courseid, $user->id);
+                foreach ($grade_progress as $grade) {
+                    if($grade->sum < 5 && $grade->sum)
+                        $selectGroup[] = $user;
+                    }
+                }
+            }else {
+                foreach ($usersCourse as $user) {
+                $grade_progress = gradeProgress($courseid, $user->id);
+                foreach ($grade_progress as $grade) {
+                    if(!$grade->sum)
+                        $selectGroup[] = $user;
+                    }
+                }
             }
-        }
         }
     }
     return $selectGroup;
@@ -278,7 +288,7 @@ function userGradeInfo($courseid, $userid) {
                 labels: ['Ótimo', 'Bom', 'Ruim', 'Nulos'],
                 datasets: [{
                     label: '# of Votes',
-                    data: [$a, $b, 5, $d ],
+                    data: [$a, $b, $c, $d ],
                     backgroundColor: [
                         'rgba(0, 232, 0, 1)',
                         'rgba(255, 235 , 59, 1)',
