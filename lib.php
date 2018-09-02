@@ -13,7 +13,8 @@ function pluginava_report_extend_navigation($reportnav, $course, $context) {
 function get_index_course($courseid) {          
     global $DB;
     $usersCourse = search_users($courseid);    
-    foreach ($usersCourse as $user){                            
+    if($usersCourse){
+     foreach ($usersCourse as $user){                            
         $grade_progress = gradeProgress($courseid, $user->id);        
                 
         foreach ($grade_progress as $std){
@@ -58,7 +59,15 @@ function get_index_course($courseid) {
         echo "<h4>Início das atividades no curso</h4><p>28/05/2018</p>";
         echo "</div>";        
         echo "</div>";        
-        echo "</div>";        
+        echo "</div>";           
+    }else{
+        echo "<div style='text-align:center'>
+              <img src='img/logoAvaMoodle.png' style='max-width: -webkit-fill-available;'alt='logoAvaMoodle'/>
+              <div class='alert'>
+                Não há usuários cadastrados para esse curso
+              </div>                
+            </div>";
+    }    
 }
 
 
@@ -230,6 +239,11 @@ function gradeProgress($courseid,$userid) {
     return $grade_progress;
 }
 
+//function filterUsers($users){
+//    if(strpos($strTeste, "tes") === 0){
+//    return 
+//}
+
 function userGradeInfo($courseid, $userid) {
     global $DB;
     $grade_user = $DB->get_records_sql(
@@ -305,7 +319,7 @@ function userGradeInfo($courseid, $userid) {
                 }]
             },
             options: {
-                events: ['click','mousemove']                                      
+                events: ['click','mousemove','touchmove']                                      
             }
         });                
         
