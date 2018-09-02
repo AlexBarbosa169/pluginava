@@ -45,7 +45,8 @@ $courseid = required_param('id', PARAM_INT);
 
 $PAGE->set_context($context);
 
-$PAGE->set_url('/course/report/pluginava/index.php');
+// Alteração Criada para incluir na URL
+$PAGE->set_url('/course/report/pluginava/index.php?id='.$courseid);
 
 $PAGE->requires->css('/course/report/pluginava/css/stylepluginava.css', true);
 
@@ -64,7 +65,9 @@ echo $OUTPUT->header();
 $groupTeste = optional_param('group',null, PARAM_TEXT);
 $userInfoTeste = optional_param('userInfo', null,PARAM_TEXT);
 $UserSendTeste = optional_param('userSend', null,PARAM_TEXT);
-$courseinfo = $COURSE;
+
+$courseinfo = $DB->get_record('course', array('id'=>$courseid), '*', MUST_EXIST);
+//var_dump($courseinfo);
 $group_name;
 
 if($UserSendTeste){
