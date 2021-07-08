@@ -230,6 +230,11 @@ function gradeProgress($courseid,$userid) {
     return $grade_progress;
 }
 
+//function filterUsers($users){
+//    if(strpos($strTeste, "tes") === 0){
+//    return 
+//}
+
 function userGradeInfo($courseid, $userid) {
     global $DB;
     $grade_user = $DB->get_records_sql(
